@@ -1,0 +1,128 @@
+# Создать телефонный справочник с возможностью импорта и экспорта данных в нескольких форматах.Под форматами понимаем структуру файлов, например:в файле на одной строке хранится одна часть записи, пустая строка - разделитель
+
+
+
+
+
+
+
+def input_data():
+    last_name = input("Введите фамилию: ")
+    first_name = input("Введите имя: ")
+    phone_number = input("Введите телефон: ")
+    note = input("Введите примечание: ")
+    return [last_name, first_name, phone_number, note]
+
+def choice_sep():
+    sep = input("Введите разделитель: ")
+    if sep == "":
+        sep = None
+    return sep
+
+def choice_todo():
+    print("Что желаем сделать:\n\
+    1 - импорт;\n\
+    2 - экспорт;\n\
+    3 - поиск контакта.")
+    ch = input("Введите цифру: ")
+    if ch == '1':
+        sep = choice_sep()
+        import_data(input_data(), sep)
+        
+    elif ch == '2':
+        data = export_data()
+        print_data(data)
+        
+    else:
+        word = input("Введите данные для поиска: ")
+        data = export_data()
+        item = search_data(word, data)
+        
+        if item != None:
+            print("Фамилия".center(20), "Имя".center(20), "Телефон".center(15), "Примечание".center(30))
+            print("-"*85)
+            print(item[0].center(20), item[1].center(20), item[2].center(15), item[3].center(30))
+            
+        else:
+            print("Данные не обнаружены")
+
+
+
+def export_data():
+    with open('phone.csv', 'r') as file:
+        data = []
+        t = []
+        for line in file:
+            if ',' in line:
+                temp = line.strip().split(',')
+                data.append(temp)
+            elif ';' in line:
+                temp = line.strip().split(';')
+                data.append(temp)
+            elif ':' in line:
+                temp = line.strip().split(':')
+                data.append(temp)        
+            elif line != '':
+                if line != '\n':
+                    t.append(line.strip())
+                else:
+                    data.append(t)
+                    t= []
+    return data 
+
+
+
+import csv
+ 
+with open('example.csv') as File:
+    reader = csv.reader(File, delimiter=',', quotechar=',',
+                        quoting=csv.QUOTE_MINIMAL)
+    for row in reader:       
+        #print(row)    
+
+
+
+
+#import csv
+
+#results = []
+#with open('example.csv') as File:
+    #reader = csv.DictReader(File)
+    #for row in reader:
+        #results.append(row)
+        #print (results)
+        
+        
+        
+import csv
+ 
+myData = [["Фамилия_1", "Имя_1", "Телефон_1", "Описание_1"],
+          ['Чумак', 'Дима', '4522','Рабочий'],
+          ["Фамилия_2", "Имя_2", "Телефон_2", "Описание_2"],
+          ['Кубин','Андрей','202020','Рабочий']]
+ 
+myFile = open('example2.csv', 'w')
+with myFile:
+    writer = csv.writer(myFile)
+    writer.writerows(myData)
+     
+print("Writing complete")
+
+
+import csv
+ 
+with open('example2.csv', 'w') as csvfile:
+    fieldnames = ['Фамилия', 'Имя', 'Телефон','Описание']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+ 
+    writer.writeheader()
+    writer.writerow({'Фамилия_1':'Чумак', 'Имя_1': 'Дима','Телефон_1': '245224', 'Описание_1': 'Рабочий'}),
+                               
+    writer.writerow({'Фамилия_2':'Кубин', 'Имя_2': 'Андрей', 'Телефон_2': '202020', 'Описание_2': "Рабочий"}) 
+
+ 
+print("Writing complete")  
+
+
+
+      
